@@ -12,6 +12,7 @@ import styled from "styled-components";
 
 const CalendarBlock = styled.div`
   max-width: 740px;
+  position: relative;
   font-family: "JetBrains Mono";
   border: 1px solid black;
 `;
@@ -154,13 +155,22 @@ const ScheduleCell = styled.div`
 
 const CalendarFooter = styled.footer`
   background-color: #F6F6F6;
-  color: #FE4141;
   border-top: 1px solid #E9E9E9;
   position: fixed;
   bottom: 0;
   display: block;
+  padding: 15px 0 15px 30px;
+  width: 100%;
 `;
 
+const AddEvent = styled.button``;
+
+const ToToday = styled.button`
+  color: #fe4141;
+  background-color: inherit;
+  border: none;
+  outline: none;
+`;
 
 const Calendar = () => {
 	const today = startOfToday();
@@ -198,6 +208,15 @@ const Calendar = () => {
 				}
 			)
 		)
+	}
+
+	const toToday = () => {
+		setSelectedDay(today);
+		setCurrentWeek(eachDayOfInterval({
+				start: startOfWeek(today, {weekStartsOn: 1}),
+				end: endOfWeek(today, {weekStartsOn: 1})
+			}
+		))
 	}
 
 	return (
@@ -246,7 +265,7 @@ const Calendar = () => {
 
 				</DaySchedule>
 				<CalendarFooter>
-					Today
+					<ToToday onClick={toToday}>Today</ToToday>
 				</CalendarFooter>
 			</CalendarBlock>
 
