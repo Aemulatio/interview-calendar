@@ -1,13 +1,86 @@
 import React from "react";
 import {
 	eachDayOfInterval,
-	eachWeekOfInterval,
 	endOfMonth, endOfWeek,
 	format,
 	startOfMonth,
 	startOfToday,
 	startOfWeek
 } from "date-fns"
+import styled from "styled-components";
+
+const CalendarBlock = styled.div`
+  max-width: 740px;
+
+  border: 1px solid black;
+`;
+
+const CalendarHeader = styled.header`
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Week = styled.div`
+  background-color: #f6f6f7;
+
+`;
+
+const WeekDays = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+const DayOfWeek = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  span {
+	color: black;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+  }
+
+  span:first-of-type {
+	font-size: 12px;
+	padding: 10px 5px;
+  }
+
+  span:last-of-type {
+	box-sizing: content-box;
+	padding: 5px;
+  }
+
+  span:last-of-type:hover {
+	border-radius: 50%;
+	background-color: #a6a6a7;
+	color: white;
+  }
+
+`;
+
+const WeekControls = styled.div`
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+`;
+
+const ChangeWeek = styled.button`
+  border: none;
+  outline: none;
+  background: none;
+  color: #FE4141;
+
+`;
+
+const DaySchedule = styled.div`
+
+`;
+
+const CalendarFooter = styled.footer`
+  background-color: #F6F6F6;
+  color: #FE4141;
+`;
 
 
 const Calendar = () => {
@@ -19,7 +92,7 @@ const Calendar = () => {
 		end: dayEndOfMonth
 	})
 
-	const dayStartOfWeek = startOfWeek(today, {weekStartsOn:1})
+	const dayStartOfWeek = startOfWeek(today, {weekStartsOn: 1})
 	const dayEndOfWeek = endOfWeek(today, {weekStartsOn: 1})
 	const thisWeek = eachDayOfInterval({
 		start: dayStartOfWeek,
@@ -34,35 +107,33 @@ const Calendar = () => {
 			{console.log(dates)}
 			{console.log(thisWeek)}
 
-			<div>
-				{dates.map((day, dayIndex) => (
-					<div key={day.toString()}>{format(day, "d")}</div>
-				))}
-			</div>
-
-			<div className="Calendar">
-				<header>
+			<CalendarBlock>
+				<CalendarHeader>
 					<span>Interview Calendar</span>
 					<span>+</span>
-				</header>
-				<header className="week">
-					<div className="weekDays">
-						{thisWeek.map(dayOfWeek=>(
-							<span key={dayOfWeek.toString()}>{format(dayOfWeek, "EEEEE")}</span>
+				</CalendarHeader>
+				<Week>
+					<WeekDays>
+						{thisWeek.map(dayOfWeek => (
+							<DayOfWeek key={dayOfWeek.toString()}>
+								<span>{format(dayOfWeek, "EEEEE")}</span>
+								<span>{format(dayOfWeek, "d")}</span>
+							</DayOfWeek>
 						))}
-					</div>
-					<div className="weekDates">
-						{thisWeek.map(dayOfWeek=>(
-							<span key={dayOfWeek.toString()}>{format(dayOfWeek, "d")}</span>
-						))}
-					</div>
-					<div className="weekControls">
-						<button className="prevWeek"> &lt; </button>
+					</WeekDays>
+					<WeekControls>
+						<ChangeWeek> &lt; </ChangeWeek>
 						<span className="currentWeek">{format(today, "MMMM yyyy")}</span>
-						<button className="prevWeek"> &gt; </button>
-					</div>
-				</header>
-			</div>
+						<ChangeWeek> &gt; </ChangeWeek>
+					</WeekControls>
+				</Week>
+				<DaySchedule>
+
+				</DaySchedule>
+				<CalendarFooter>
+					Today
+				</CalendarFooter>
+			</CalendarBlock>
 
 		</>
 	)
