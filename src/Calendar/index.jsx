@@ -163,13 +163,20 @@ const CalendarFooter = styled.footer`
   width: 100%;
 `;
 
-const AddEvent = styled.button``;
+const AddEvent = styled.button`
+	color: #fe4141;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: inherit;
+`;
 
 const ToToday = styled.button`
   color: #fe4141;
   background-color: inherit;
   border: none;
   outline: none;
+  cursor: pointer;
 `;
 
 const Calendar = () => {
@@ -230,7 +237,7 @@ const Calendar = () => {
 			<CalendarBlock>
 				<CalendarHeader>
 					<span>Interview Calendar</span>
-					<span>+</span>
+					<AddEvent onClick={()=>prompt("Enter event time:\nYYYY-MM-DD HH:mm:ss")}>+</AddEvent>
 				</CalendarHeader>
 				<Week>
 					<WeekDays>
