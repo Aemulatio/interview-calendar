@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
 	eachDayOfInterval,
 	endOfMonth, endOfWeek,
@@ -52,48 +52,58 @@ const DayOfWeek = styled.div`
   span:last-of-type {
 	box-sizing: content-box;
 	padding: 5px;
+	cursor: pointer;
   }
 
-  span:last-of-type:hover {
+  &.current span:last-of-type {
 	border-radius: 50%;
 	background-color: #a6a6a7;
 	color: white;
   }
 
-`;
-
-const CurrentDate = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  span {
-	color: black;
-	width: 20px;
-	height: 20px;
-	text-align: center;
+  &.today span:last-of-type {
+	color: red;
   }
 
-  span:first-of-type {
-	font-size: 12px;
-	padding: 10px 5px;
-  }
-
-  span:last-of-type {
-	box-sizing: content-box;
-	padding: 5px;
-
-	border-radius: 50%;
-	background-color: #FE4141;
+  &.today.current span:last-of-type {
 	color: white;
+	background-color: #fe4141;
+	border-radius: 50%;
   }
-
-  //span:last-of-type:hover {
-  //border-radius: 50%;
-  //background-color: #a6a6a7;
-  //color: white;
-  //}
-
 `;
+
+// const CurrentDate = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//
+//   span {
+// 	color: black;
+// 	width: 20px;
+// 	height: 20px;
+// 	text-align: center;
+//   }
+//
+//   span:first-of-type {
+// 	font-size: 12px;
+// 	padding: 10px 5px;
+//   }
+//
+//   span:last-of-type {
+// 	box-sizing: content-box;
+// 	padding: 5px;
+//
+// 	border-radius: 50%;
+// 	background-color: #FE4141;
+// 	color: white;
+//   }
+//
+//   //span:last-of-type:hover {
+//   //border-radius: 50%;
+//   //background-color: #a6a6a7;
+//   //color: white;
+//   //}
+//
+// `;
 
 const WeekControls = styled.div`
   display: flex;
@@ -116,15 +126,21 @@ const DaySchedule = styled.div`
 `;
 
 const ScheduleRow = styled.div`
-  
+
   padding-left: 10px;
   //height: 62px;
 
   display: flex;
-	
+
   div:not(:first-child) {
 	border-left: 1px solid #E9E9E9;
   }
+`;
+
+const Time = styled.span`
+  margin-left: 17px;
+
+
 `;
 
 const ScheduleCell = styled.div`
@@ -148,30 +164,34 @@ const CalendarFooter = styled.footer`
 
 const Calendar = () => {
 	const today = startOfToday();
-	const dayStartOfMonth = startOfMonth(today)
-	const dayEndOfMonth = endOfMonth(today)
-	const dates = eachDayOfInterval({
-		start: dayStartOfMonth,
-		end: dayEndOfMonth
-	})
+	const [selectedDay, setSelectedDay] = useState(today)
+	const [currentWeek, setCurrentWeek] = useState(
+		eachDayOfInterval({
+				start: startOfWeek(today, {weekStartsOn: 1}),
+				end: endOfWeek(today, {weekStartsOn: 1})
+			}
+		))
 
-	const dayStartOfWeek = startOfWeek(today, {weekStartsOn: 1})
-	const dayEndOfWeek = endOfWeek(today, {weekStartsOn: 1})
-	const thisWeek = eachDayOfInterval({
-		start: dayStartOfWeek,
-		end: dayEndOfWeek
-	});
+	// const dayStartOfMonth = startOfMonth(today)
+	// const dayEndOfMonth = endOfMonth(today)
+	// const dates = eachDayOfInterval({
+	// 	start: dayStartOfMonth,
+	// 	end: dayEndOfMonth
+	// })
 
 	const hours = eachHourOfInterval({start: today, end: add(today, {days: 1})})
 
+	const previousWeek = () => {
+		console.log(this)
+	}
 
 	return (
 		<>
-			{console.log(today)}
-			{console.log(format(today, "yyyy-MM-dd"))}
-			{console.log(dates)}
-			{console.log(thisWeek)}
-			{console.log(hours)}
+			{/*{console.log(today)}*/}
+			{/*{console.log(format(today, "yyyy-MM-dd"))}*/}
+			{/*{console.log(dates)}*/}
+			{/*{console.log(currentWeek)}*/}
+			{/*{console.log(hours)}*/}
 
 			<CalendarBlock>
 				<CalendarHeader>
@@ -180,22 +200,27 @@ const Calendar = () => {
 				</CalendarHeader>
 				<Week>
 					<WeekDays>
-						{thisWeek.map(dayOfWeek => (
-							isEqual(dayOfWeek, today)
-								?
-								<CurrentDate key={dayOfWeek.toString()}>
-									<span>{format(dayOfWeek, "EEEEE")}</span>
-									<span>{format(dayOfWeek, "d")}</span>
-								</CurrentDate>
-								:
-								<DayOfWeek key={dayOfWeek.toString()}>
-									<span>{format(dayOfWeek, "EEEEE")}</span>
-									<span>{format(dayOfWeek, "d")}</span>
-								</DayOfWeek>
+						{currentWeek.map(dayOfWeek => (
+							// isEqual(dayOfWeek, today)
+							// 	?
+							// 	<CurrentDate key={dayOfWeek.toString()}>
+							// 		<span>{format(dayOfWeek, "EEEEE")}</span>
+							// 		<span>{format(dayOfWeek, "d")}</span>
+							// 	</CurrentDate>
+							// 	:
+							<DayOfWeek key={dayOfWeek.toString()} onClick={() => {
+								setSelectedDay(dayOfWeek);
+								console.log(dayOfWeek)// temp
+							}}
+									   className={`${isEqual(dayOfWeek, today) ? "today" : ""} ${isEqual(dayOfWeek, selectedDay) ? "current" : ""}`}
+							>
+								<span>{format(dayOfWeek, "EEEEE")}</span>
+								<span>{format(dayOfWeek, "d")}</span>
+							</DayOfWeek>
 						))}
 					</WeekDays>
 					<WeekControls>
-						<ChangeWeek> &lt; </ChangeWeek>
+						<ChangeWeek onClick={previousWeek}> &lt; </ChangeWeek>
 						<span className="currentWeek">{format(today, "MMMM yyyy")}</span>
 						<ChangeWeek> &gt; </ChangeWeek>
 					</WeekControls>
@@ -203,7 +228,7 @@ const Calendar = () => {
 				<DaySchedule>
 					{hours.map(hour => (
 						<ScheduleRow key={hour.toString()}>
-							{format(hour, "HH:mm")}
+							<Time>{format(hour, "HH:mm")}</Time>
 							<ScheduleCell></ScheduleCell>
 							<ScheduleCell></ScheduleCell>
 							<ScheduleCell></ScheduleCell>
