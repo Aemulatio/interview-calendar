@@ -116,7 +116,7 @@ const DaySchedule = styled.div`
 `;
 
 const ScheduleRow = styled.div`
-  border-top: 1px solid #E9E9E9;
+  
   padding-left: 10px;
   //height: 62px;
 
@@ -128,10 +128,12 @@ const ScheduleRow = styled.div`
 `;
 
 const ScheduleCell = styled.div`
-  margin: 2px;
-  height: 58px;
+  //margin: 2px;
+  min-height: 58px;
   width: 74px;
+  box-sizing: content-box;
   //background-color: #ebecff;
+  border-top: 1px solid #E9E9E9;
 `;
 
 const CalendarFooter = styled.footer`
