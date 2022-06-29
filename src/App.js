@@ -1,10 +1,13 @@
 import './App.css';
 import styled from "styled-components";
 
+import Calendar from "./Calendar";
+
 function App() {
 	return (
-		<>
-		</>
+		<div>
+			<Calendar/>
+		</div>
 	);
 }
 
