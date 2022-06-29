@@ -182,7 +182,22 @@ const Calendar = () => {
 	const hours = eachHourOfInterval({start: today, end: add(today, {days: 1})})
 
 	const previousWeek = () => {
-		console.log(this)
+		setCurrentWeek(
+			eachDayOfInterval({
+					start: startOfWeek(add(currentWeek[0], {weeks: -1}), {weekStartsOn: 1}),
+					end: endOfWeek(add(currentWeek[0], {weeks: -1}), {weekStartsOn: 1})
+				}
+			)
+		)
+	}
+	const nextWeek = () => {
+		setCurrentWeek(
+			eachDayOfInterval({
+					start: startOfWeek(add(currentWeek[0], {weeks: 1}), {weekStartsOn: 1}),
+					end: endOfWeek(add(currentWeek[0], {weeks: 1}), {weekStartsOn: 1})
+				}
+			)
+		)
 	}
 
 	return (
@@ -201,17 +216,7 @@ const Calendar = () => {
 				<Week>
 					<WeekDays>
 						{currentWeek.map(dayOfWeek => (
-							// isEqual(dayOfWeek, today)
-							// 	?
-							// 	<CurrentDate key={dayOfWeek.toString()}>
-							// 		<span>{format(dayOfWeek, "EEEEE")}</span>
-							// 		<span>{format(dayOfWeek, "d")}</span>
-							// 	</CurrentDate>
-							// 	:
-							<DayOfWeek key={dayOfWeek.toString()} onClick={() => {
-								setSelectedDay(dayOfWeek);
-								console.log(dayOfWeek)// temp
-							}}
+							<DayOfWeek key={dayOfWeek.toString()} onClick={() => setSelectedDay(dayOfWeek)}
 									   className={`${isEqual(dayOfWeek, today) ? "today" : ""} ${isEqual(dayOfWeek, selectedDay) ? "current" : ""}`}
 							>
 								<span>{format(dayOfWeek, "EEEEE")}</span>
@@ -221,8 +226,8 @@ const Calendar = () => {
 					</WeekDays>
 					<WeekControls>
 						<ChangeWeek onClick={previousWeek}> &lt; </ChangeWeek>
-						<span className="currentWeek">{format(today, "MMMM yyyy")}</span>
-						<ChangeWeek> &gt; </ChangeWeek>
+						<span className="currentWeek">{format(selectedDay, "MMMM yyyy")}</span>
+						<ChangeWeek onClick={nextWeek}> &gt; </ChangeWeek>
 					</WeekControls>
 				</Week>
 				<DaySchedule>
