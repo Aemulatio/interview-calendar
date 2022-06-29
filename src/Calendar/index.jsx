@@ -5,7 +5,8 @@ import {
 	format,
 	startOfMonth,
 	startOfToday,
-	startOfWeek
+	startOfWeek,
+	isEqual
 } from "date-fns"
 import styled from "styled-components";
 
@@ -30,6 +31,7 @@ const WeekDays = styled.div`
   display: flex;
   justify-content: space-around;
 `;
+
 const DayOfWeek = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,6 +58,39 @@ const DayOfWeek = styled.div`
 	background-color: #a6a6a7;
 	color: white;
   }
+
+`;
+
+const CurrentDate = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  span {
+	color: black;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+  }
+
+  span:first-of-type {
+	font-size: 12px;
+	padding: 10px 5px;
+  }
+
+  span:last-of-type {
+	box-sizing: content-box;
+	padding: 5px;
+	
+	border-radius: 50%;
+	background-color: #FE4141;
+	color: white;
+  }
+
+  //span:last-of-type:hover {
+	//border-radius: 50%;
+	//background-color: #a6a6a7;
+	//color: white;
+  //}
 
 `;
 
@@ -115,10 +150,17 @@ const Calendar = () => {
 				<Week>
 					<WeekDays>
 						{thisWeek.map(dayOfWeek => (
-							<DayOfWeek key={dayOfWeek.toString()}>
-								<span>{format(dayOfWeek, "EEEEE")}</span>
-								<span>{format(dayOfWeek, "d")}</span>
-							</DayOfWeek>
+							isEqual(dayOfWeek, today)
+								?
+								<CurrentDate key={dayOfWeek.toString()}>
+									<span>{format(dayOfWeek, "EEEEE")}</span>
+									<span>{format(dayOfWeek, "d")}</span>
+								</CurrentDate>
+								:
+								<DayOfWeek key={dayOfWeek.toString()}>
+									<span>{format(dayOfWeek, "EEEEE")}</span>
+									<span>{format(dayOfWeek, "d")}</span>
+								</DayOfWeek>
 						))}
 					</WeekDays>
 					<WeekControls>
