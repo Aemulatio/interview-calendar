@@ -1,12 +1,12 @@
 const db = require("../lib/db")
 
-exports.getTodoListApi = async (req, res) => {
-	const todos = await db.getTodoList()
+exports.getEventsList = async (req, res) => {
+	const todos = await db.getEventsList()
 	res.status(200).json(todos)
 }
 
-exports.createNewTodoApi = async (req, res,) => {
+exports.createNewEvent = async (req, res,) => {
 	const {name} = req.body;
-	const added = await db.createNewTodo(name);
+	const added = await db.createNewEvent(name);
 	res.status(201).json(added)
 }

@@ -13,8 +13,8 @@ app.use("/api", cors());
 
 require('./lib/db')
 
-app.get("/api/todolist", routes.getTodoListApi)
-app.post("/api/create", routes.createNewTodoApi)
+app.get("/api/events", routes.getEventsList)
+app.post("/api/create", routes.createNewEvent)
 
 
 app.listen(port, () => {
