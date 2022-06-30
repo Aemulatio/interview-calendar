@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
 	eachDayOfInterval,
 	endOfMonth, endOfWeek,
@@ -6,12 +6,15 @@ import {
 	startOfMonth,
 	startOfToday,
 	startOfWeek,
-	isEqual, eachHourOfInterval, add
+	isEqual, eachHourOfInterval, add, isDate, parse
 } from "date-fns"
 import styled from "styled-components";
+import axios from "axios";
 
 const CalendarBlock = styled.div`
   max-width: 740px;
+  max-height: 100vh;
+  overflow-y: scroll;
   position: relative;
   font-family: "JetBrains Mono";
   border: 1px solid black;
@@ -21,6 +24,8 @@ const CalendarHeader = styled.header`
   padding: 20px;
   display: flex;
   justify-content: space-between;
+  background-color: white;
+
 `;
 
 const Week = styled.div`
@@ -164,7 +169,7 @@ const CalendarFooter = styled.footer`
 `;
 
 const AddEvent = styled.button`
-	color: #fe4141;
+  color: #fe4141;
   cursor: pointer;
   border: none;
   outline: none;
@@ -177,6 +182,11 @@ const ToToday = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
+`;
+
+const FixedHeader = styled.div`
+  position: sticky;
+  top: 0;
 `;
 
 const Calendar = () => {
@@ -197,6 +207,12 @@ const Calendar = () => {
 	// })
 
 	const hours = eachHourOfInterval({start: today, end: add(today, {days: 1})})
+	const [events, setEvents] = useState([])
+	useEffect(() => {
+		axios.get("/api/events")
+			.then(res => setEvents(res.data))
+	}, [])
+
 
 	const previousWeek = () => {
 		setCurrentWeek(
@@ -232,30 +248,52 @@ const Calendar = () => {
 			{/*{console.log(format(today, "yyyy-MM-dd"))}*/}
 			{/*{console.log(dates)}*/}
 			{/*{console.log(currentWeek)}*/}
-			{/*{console.log(hours)}*/}
+			{console.log(events)}
 
 			<CalendarBlock>
-				<CalendarHeader>
-					<span>Interview Calendar</span>
-					<AddEvent onClick={()=>prompt("Enter event time:\nYYYY-MM-DD HH:mm:ss")}>+</AddEvent>
-				</CalendarHeader>
-				<Week>
-					<WeekDays>
-						{currentWeek.map(dayOfWeek => (
-							<DayOfWeek key={dayOfWeek.toString()} onClick={() => setSelectedDay(dayOfWeek)}
-									   className={`${isEqual(dayOfWeek, today) ? "today" : ""} ${isEqual(dayOfWeek, selectedDay) ? "current" : ""}`}
-							>
-								<span>{format(dayOfWeek, "EEEEE")}</span>
-								<span>{format(dayOfWeek, "d")}</span>
-							</DayOfWeek>
-						))}
-					</WeekDays>
-					<WeekControls>
-						<ChangeWeek onClick={previousWeek}> &lt; </ChangeWeek>
-						<span className="currentWeek">{format(selectedDay, "MMMM yyyy")}</span>
-						<ChangeWeek onClick={nextWeek}> &gt; </ChangeWeek>
-					</WeekControls>
-				</Week>
+				<FixedHeader>
+					<CalendarHeader>
+						<span>Interview Calendar</span>
+						<AddEvent onClick={() => {
+							let enteredDate = prompt("Enter event time:\nYYYY-MM-DD HH:mm:ss");
+							console.log(enteredDate)
+							if ((enteredDate !== null || enteredDate !== "")
+								&& isDate(parse(enteredDate, "yyyy-MM-dd HH:mm:ss", new Date()))) {
+
+								const eventDate = parse(enteredDate, "yyyy-MM-dd HH:mm:ss", new Date());
+								console.log(eventDate)
+
+								axios.post("/api/create/", {
+									time: eventDate
+								})
+									.then(function (response) {
+										console.log(response);
+									})
+									.catch(function (error) {
+										console.log(error);
+									});
+//2022-02-20 20:20:20
+							}
+						}}>+</AddEvent>
+					</CalendarHeader>
+					<Week>
+						<WeekDays>
+							{currentWeek.map(dayOfWeek => (
+								<DayOfWeek key={dayOfWeek.toString()} onClick={() => setSelectedDay(dayOfWeek)}
+										   className={`${isEqual(dayOfWeek, today) ? "today" : ""} ${isEqual(dayOfWeek, selectedDay) ? "current" : ""}`}
+								>
+									<span>{format(dayOfWeek, "EEEEE")}</span>
+									<span>{format(dayOfWeek, "d")}</span>
+								</DayOfWeek>
+							))}
+						</WeekDays>
+						<WeekControls>
+							<ChangeWeek onClick={previousWeek}> &lt; </ChangeWeek>
+							<span className="currentWeek">{format(selectedDay, "MMMM yyyy")}</span>
+							<ChangeWeek onClick={nextWeek}> &gt; </ChangeWeek>
+						</WeekControls>
+					</Week>
+				</FixedHeader>
 				<DaySchedule>
 					{hours.map(hour => (
 						<ScheduleRow key={hour.toString()}>
