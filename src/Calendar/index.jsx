@@ -161,7 +161,7 @@ const ScheduleCell = styled.div`
 const CalendarFooter = styled.footer`
   background-color: #F6F6F6;
   border-top: 1px solid #E9E9E9;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   display: block;
   padding: 15px 0 15px 30px;
