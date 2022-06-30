@@ -6,7 +6,7 @@ exports.getEventsList = async (req, res) => {
 }
 
 exports.createNewEvent = async (req, res,) => {
-	const {name} = req.body;
-	const added = await db.createNewEvent(name);
+	const {time} = req.body;
+	const added = await db.createNewEvent(time);
 	res.status(201).json(added)
 }
