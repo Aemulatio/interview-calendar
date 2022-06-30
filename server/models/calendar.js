@@ -1,12 +1,8 @@
 const mongoose = require("mongoose")
 
 const todoSchema = mongoose.Schema({
-	name: String,
-	done: {
-		type: Boolean,
-		default: false
-	},
+	time: Date,
 })
 
-const Todo = mongoose.model("Todos", todoSchema)
-module.exports = Todo;
+const Calendar = mongoose.model("Calendar", todoSchema)
+module.exports = Calendar;
