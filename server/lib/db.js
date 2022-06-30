@@ -13,22 +13,21 @@ db.on("error", err => {
 });
 db.once("open", () => console.log("Установаленно соединение с MongoDB"))
 
-const Todo = require("../models/todo")
+const Calendar = require("../models/calendar")
 
-Todo.find((err, todos)=>{
+Calendar.find((err, todos) => {
 	if (err) console.error(err)
 	if (todos.length) return
 
-	new Todo({
-		name: "test",
-		done: false
+	new Calendar({
+		time: new Date()
 	}).save()
 })
 
 module.exports = {
-	getTodoList: async () => await Todo.find(),
-	createNewTodo: async (name) => {
-		await Todo.create({name: name})
+	getEventsList: async () => await Calendar.find(),
+	createNewEvent: async (time) => {
+		await Calendar.create({time: time})
 	},
 	// getVacationBySku: async sku => Vacation.findOne({sku}),
 	// getAttractions: async (options = {}) => Attraction.find(options),
