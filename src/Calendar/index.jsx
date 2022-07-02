@@ -6,7 +6,7 @@ import {
 	startOfMonth,
 	startOfToday,
 	startOfWeek,
-	isEqual, eachHourOfInterval, add, isDate, parse
+	isEqual, eachHourOfInterval, add, isDate, parse, formatISO
 } from "date-fns"
 import styled from "styled-components";
 import axios from "axios";
@@ -260,7 +260,7 @@ const Calendar = () => {
 							if ((enteredDate !== null || enteredDate !== "")
 								&& isDate(parse(enteredDate, "yyyy-MM-dd HH:mm:ss", new Date()))) {
 
-								const eventDate = parse(enteredDate, "yyyy-MM-dd HH:mm:ss", new Date());
+								const eventDate = formatISO(parse(enteredDate, "yyyy-MM-dd HH:mm:ss", new Date()));
 								console.log(eventDate)
 
 								axios.post("/api/create/", {
@@ -268,6 +268,8 @@ const Calendar = () => {
 								})
 									.then(function (response) {
 										console.log(response);
+										axios.get("/api/events")
+											.then(res => setEvents(res.data))
 									})
 									.catch(function (error) {
 										console.log(error);
