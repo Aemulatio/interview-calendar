@@ -1,7 +1,9 @@
 const db = require("../lib/db")
 
 exports.getEventsList = async (req, res) => {
-	const todos = await db.getEventsList()
+	// console.log(req)
+	console.log(req.query.date)
+	const todos = await db.getEventsList(req.query.date)
 	res.status(200).json(todos)
 }
 
