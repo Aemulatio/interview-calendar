@@ -125,10 +125,14 @@ const ChangeWeek = styled.button`
 
 `;
 
-const DaySchedule = styled.div`
-  background-color: #ffffff;
-  color: #C0C0C0;
-  margin: 10px 0;
+// const DaySchedule = styled.div`
+//   background-color: #ffffff;
+//   color: #C0C0C0;
+//   margin: 10px 0;
+// `;
+
+const DaySchedule = styled.table`
+	
 `;
 
 const ScheduleRow = styled.div`
@@ -209,9 +213,9 @@ const Calendar = () => {
 	const hours = eachHourOfInterval({start: today, end: add(today, {days: 1})})
 	const [events, setEvents] = useState([])
 	useEffect(() => {
-		axios.get("/api/events")
+		axios.get("/api/events?date="+format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 			.then(res => setEvents(res.data))
-	}, [])
+	}, [selectedDay])
 
 
 	const previousWeek = () => {
@@ -268,8 +272,8 @@ const Calendar = () => {
 								})
 									.then(function (response) {
 										console.log(response);
-										axios.get("/api/events")
-											.then(res => setEvents(res.data))
+										// axios.get("/api/events")
+										// 	.then(res => setEvents(res.data))
 									})
 									.catch(function (error) {
 										console.log(error);
