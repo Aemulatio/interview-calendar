@@ -172,7 +172,7 @@ const ScheduleRow = styled.tr`
 	min-height: 58px;
 	height: 58px;
 
-	box-sizing: content-box;
+	box-sizing: border-box;
   }
 
   td.hasEvent {
@@ -181,6 +181,8 @@ const ScheduleRow = styled.tr`
 	
 	border: 2px solid white;
 	display: block;
+	width: 100%;
+	height: 100%;
   }
 
 `;
