@@ -78,39 +78,6 @@ const DayOfWeek = styled.div`
   }
 `;
 
-// const CurrentDate = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//
-//   span {
-// 	color: black;
-// 	width: 20px;
-// 	height: 20px;
-// 	text-align: center;
-//   }
-//
-//   span:first-of-type {
-// 	font-size: 12px;
-// 	padding: 10px 5px;
-//   }
-//
-//   span:last-of-type {
-// 	box-sizing: content-box;
-// 	padding: 5px;
-//
-// 	border-radius: 50%;
-// 	background-color: #FE4141;
-// 	color: white;
-//   }
-//
-//   //span:last-of-type:hover {
-//   //border-radius: 50%;
-//   //background-color: #a6a6a7;
-//   //color: white;
-//   //}
-//
-// `;
-
 const WeekControls = styled.div`
   display: flex;
   justify-content: space-around;
@@ -125,12 +92,6 @@ const ChangeWeek = styled.button`
 
 `;
 
-// const DaySchedule = styled.div`
-//   background-color: #ffffff;
-//   color: #C0C0C0;
-//   margin: 10px 0;
-// `;
-
 const DaySchedule = styled.table`
   background-color: #ffffff;
   color: #C0C0C0;
@@ -140,18 +101,6 @@ const DaySchedule = styled.table`
   table-layout: auto;
   width: 100%;
 `;
-//
-// const ScheduleRow = styled.div`
-//
-//   padding-left: 10px;
-//   //height: 62px;
-//
-//   display: flex;
-//
-//   div:not(:first-child) {
-// 	border-left: 1px solid #E9E9E9;
-//   }
-// `;
 
 const ScheduleRow = styled.tr`
 
@@ -184,9 +133,7 @@ const ScheduleRow = styled.tr`
 	width: 100%;
 	height: 100%;
   }
-
 `;
-
 
 const ScheduleCell = styled.div`
   //margin: 2px;
