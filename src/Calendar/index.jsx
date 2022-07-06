@@ -6,7 +6,7 @@ import {
 	startOfMonth,
 	startOfToday,
 	startOfWeek,
-	isEqual, eachHourOfInterval, add, isDate, parse, formatISO
+	isEqual, eachHourOfInterval, add, isDate, parse, formatISO, isWithinInterval, parseISO
 } from "date-fns"
 import styled from "styled-components";
 import axios from "axios";
@@ -132,19 +132,51 @@ const ChangeWeek = styled.button`
 // `;
 
 const DaySchedule = styled.table`
-	
+  background-color: #ffffff;
+  color: #C0C0C0;
+  margin: 10px 0;
+
+  border-collapse: collapse;
 `;
+//
+// const ScheduleRow = styled.div`
+//
+//   padding-left: 10px;
+//   //height: 62px;
+//
+//   display: flex;
+//
+//   div:not(:first-child) {
+// 	border-left: 1px solid #E9E9E9;
+//   }
+// `;
 
-const ScheduleRow = styled.div`
+const ScheduleRow = styled.tr`
 
-  padding-left: 10px;
-  //height: 62px;
-
-  display: flex;
-
-  div:not(:first-child) {
-	border-left: 1px solid #E9E9E9;
+  td:nth-of-type(1) {
+	border: none;
+	margin-left: 17px;
+	text-align: center;
+	vertical-align: top;
   }
+
+  td:nth-of-type(2) {
+	border-left: none;
+  }
+
+  td {
+	border: 1px solid #E9E9E9;
+	width: 74px;
+	min-height: 58px;
+	height: 58px;
+
+	box-sizing: content-box;
+  }
+
+  td.hasEvent {
+	background-color: #EBECFF;
+  }
+
 `;
 
 const Time = styled.span`
@@ -169,7 +201,6 @@ const CalendarFooter = styled.footer`
   bottom: 0;
   display: block;
   padding: 15px 0 15px 30px;
-  width: 100%;
 `;
 
 const AddEvent = styled.button`
@@ -210,10 +241,10 @@ const Calendar = () => {
 	// 	end: dayEndOfMonth
 	// })
 
-	const hours = eachHourOfInterval({start: today, end: add(today, {days: 1})})
+	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})})
 	const [events, setEvents] = useState([])
 	useEffect(() => {
-		axios.get("/api/events?date="+format(selectedDay, "yyyy-MM-dd", new Date()).toString())
+		axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 			.then(res => setEvents(res.data))
 	}, [selectedDay])
 
@@ -303,14 +334,35 @@ const Calendar = () => {
 				<DaySchedule>
 					{hours.map(hour => (
 						<ScheduleRow key={hour.toString()}>
-							<Time>{format(hour, "HH:mm")}</Time>
-							<ScheduleCell></ScheduleCell>
-							<ScheduleCell></ScheduleCell>
-							<ScheduleCell></ScheduleCell>
-							<ScheduleCell></ScheduleCell>
-							<ScheduleCell></ScheduleCell>
-							<ScheduleCell></ScheduleCell>
-							<ScheduleCell></ScheduleCell>
+							{/*<Time>{format(hour, "HH:mm")}</Time>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							{/*<ScheduleCell></ScheduleCell>*/}
+							<td>{format(hour, "HH:mm")}</td>
+							{
+
+								events.map(event_ => {
+								console.log(event_);
+								console.log(event_.time)
+								console.log(add(hour, {hours: 0}))
+								console.log(add(hour, {hours: 1}))
+								console.log(isWithinInterval(parseISO(event_.time), {
+								start: hour,
+								end: add(hour, {hours: 1})
+							}))
+							}
+								)}
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</ScheduleRow>
 					))}
 
