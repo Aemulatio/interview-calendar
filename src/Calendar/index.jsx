@@ -137,6 +137,8 @@ const DaySchedule = styled.table`
   margin: 10px 0;
 
   border-collapse: collapse;
+  table-layout: auto;
+  width: 100%;
 `;
 //
 // const ScheduleRow = styled.div`
@@ -175,15 +177,14 @@ const ScheduleRow = styled.tr`
 
   td.hasEvent {
 	background-color: #EBECFF;
+	padding: 2px;
+	
+	border: 2px solid white;
+	display: block;
   }
 
 `;
 
-const Time = styled.span`
-  margin-left: 17px;
-
-
-`;
 
 const ScheduleCell = styled.div`
   //margin: 2px;
@@ -234,7 +235,7 @@ const Calendar = () => {
 			}
 		))
 
-	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})})
+	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})}); //.map(hour=>format(hour, "HH:mm"))
 	const [events, setEvents] = useState([])
 	useEffect(() => {
 		axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
@@ -272,6 +273,7 @@ const Calendar = () => {
 	return (
 		<>
 			{console.log(events)}
+			{console.log(hours)}
 
 			<CalendarBlock>
 				<FixedHeader>
@@ -322,35 +324,64 @@ const Calendar = () => {
 				<DaySchedule>
 					{hours.map(hour => (
 						<ScheduleRow key={hour.toString()}>
-							{/*<Time>{format(hour, "HH:mm")}</Time>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							{/*<ScheduleCell></ScheduleCell>*/}
-							<td>{format(hour, "HH:mm")}</td>
-							{
 
-								events.map(event_ => {
-								console.log(event_);
-								console.log(event_.time)
-								console.log(add(hour, {hours: 0}))
-								console.log(add(hour, {hours: 1}))
-								console.log(isWithinInterval(parseISO(event_.time), {
-								start: hour,
-								end: add(hour, {hours: 1})
-							}))
-							}
-								)}
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td>{format(hour, "HH:mm")}</td>
+
+							<td className={
+								events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: hour,
+											end: add(hour, {minutes: 10})
+										}) ? "hasEvent" : ""
+									)
+								)
+							}></td>
+							<td className={
+								events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: add(hour, {minutes:10}),
+											end: add(hour, {minutes: 20})
+										}) ? "hasEvent" : ""
+									)
+								)
+							}></td>
+							<td className={
+								events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: add(hour, {minutes:20}),
+											end: add(hour, {minutes: 30})
+										}) ? "hasEvent" : ""
+									)
+								)
+							}></td>
+							<td className={
+								events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: add(hour, {minutes:30}),
+											end: add(hour, {minutes: 40})
+										}) ? "hasEvent" : ""
+									)
+								)
+							}></td>
+							<td className={
+								events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: add(hour, {minutes:40}),
+											end: add(hour, {minutes: 50})
+										}) ? "hasEvent" : ""
+									)
+								)
+							}></td>
+							<td className={
+								events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: add(hour, {minutes:50}),
+											end: add(hour, {minutes: 60})
+										}) ? "hasEvent" : ""
+									)
+								)
+							}></td>
+
 						</ScheduleRow>
 					))}
 
