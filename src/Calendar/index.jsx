@@ -234,20 +234,12 @@ const Calendar = () => {
 			}
 		))
 
-	// const dayStartOfMonth = startOfMonth(today)
-	// const dayEndOfMonth = endOfMonth(today)
-	// const dates = eachDayOfInterval({
-	// 	start: dayStartOfMonth,
-	// 	end: dayEndOfMonth
-	// })
-
 	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})})
 	const [events, setEvents] = useState([])
 	useEffect(() => {
 		axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 			.then(res => setEvents(res.data))
 	}, [selectedDay])
-
 
 	const previousWeek = () => {
 		setCurrentWeek(
@@ -279,10 +271,6 @@ const Calendar = () => {
 
 	return (
 		<>
-			{/*{console.log(today)}*/}
-			{/*{console.log(format(today, "yyyy-MM-dd"))}*/}
-			{/*{console.log(dates)}*/}
-			{/*{console.log(currentWeek)}*/}
 			{console.log(events)}
 
 			<CalendarBlock>
