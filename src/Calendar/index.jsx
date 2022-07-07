@@ -343,7 +343,7 @@ const Calendar = () => {
 					<Week>
 						<WeekDays>
 							{currentWeek.map(dayOfWeek => (
-								<DayOfWeek key={dayOfWeek.toString()} onClick={() => setSelectedDay(dayOfWeek)}
+								<DayOfWeek key={dayOfWeek.toString()} onClick={() => {setSelectedDay(dayOfWeek); setToDelete("");}}
 										   className={`${isEqual(dayOfWeek, today) ? "today" : ""} ${isEqual(dayOfWeek, selectedDay) ? "current" : ""}`}
 								>
 									<span>{format(dayOfWeek, "EEEEE")}</span>
