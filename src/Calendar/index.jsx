@@ -145,15 +145,6 @@ const ScheduleRow = styled.tr`
   }
 `;
 
-const ScheduleCell = styled.div`
-  //margin: 2px;
-  min-height: 58px;
-  width: 74px;
-  box-sizing: content-box;
-  //background-color: #ebecff;
-  border-top: 1px solid #E9E9E9;
-`;
-
 const CalendarFooter = styled.footer`
   background-color: #F6F6F6;
   border-top: 1px solid #E9E9E9;
@@ -209,7 +200,6 @@ const Calendar = () => {
 
 	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})}); //.map(hour=>format(hour, "HH:mm"))
 	const [events, setEvents] = useState([])
-	let schedule = {};
 	useEffect(() => {
 		axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 			.then(res => {
