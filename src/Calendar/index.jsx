@@ -127,11 +127,15 @@ const ScheduleRow = styled.tr`
   td.hasEvent {
 	background-color: #EBECFF;
 	padding: 2px;
-	
+
 	border: 2px solid white;
 	display: block;
 	width: 100%;
 	height: 100%;
+  }
+
+  td.hasEvent.active {
+	background-color: #b3b7ff;
   }
 `;
 
@@ -150,7 +154,7 @@ const CalendarFooter = styled.footer`
   position: sticky;
   bottom: 0;
   display: block;
-  padding: 15px 0 15px 30px;
+  padding: 15px 30px 15px;
 `;
 
 const AddEvent = styled.button`
@@ -173,6 +177,16 @@ const FixedHeader = styled.div`
   position: sticky;
   top: 0;
 `;
+
+const DeleteButton = styled.button`
+  border: none;
+  outline: none;
+  background-color: inherit;
+  color: #fe4141;
+  cursor: pointer;
+  float: right;
+`;
+
 
 const Calendar = () => {
 	const today = startOfToday();
@@ -218,11 +232,39 @@ const Calendar = () => {
 			}
 		))
 	}
+	const [toDelete, setToDelete] = useState("")
+	const [active, setActive] = useState(false)
+
+	const chooseToDelete = (e) => {
+		const target = e.target;
+		console.log(target.classList)
+		// target.classList.add("active")
+		setActive(true)
+
+		if (target.classList.contains("hasEvent")) {
+			setToDelete(target.classList[target.classList.length-1])
+			console.log(target.classList)
+			setActive(true)
+
+			// target.classList.add("active")
+		} else {
+			setActive(false)
+
+			setToDelete("")
+		}
+		console.log(toDelete)
+		console.log(active)
+
+	};
+
+	const DeleteEvent = () => {
+
+	}
 
 	return (
 		<>
-			{console.log(events)}
-			{console.log(hours)}
+			{/*{console.log(events)}*/}
+			{/*{console.log(hours)}*/}
 
 			<CalendarBlock>
 				<FixedHeader>
@@ -271,72 +313,75 @@ const Calendar = () => {
 					</Week>
 				</FixedHeader>
 				<DaySchedule>
+					<tbody>
 					{hours.map(hour => (
 						<ScheduleRow key={hour.toString()}>
 
 							<td>{format(hour, "HH:mm")}</td>
 
 							<td className={
-								events.map(event_ => (
+								`${active ? " active " : ""} ${events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 											start: hour,
 											end: add(hour, {minutes: 10})
-										}) ? "hasEvent" : ""
+										}) ? "hasEvent " + event_._id : ""
 									)
 								)
-							}></td>
+								}`} onClick={chooseToDelete}></td>
 							<td className={
-								events.map(event_ => (
+								`${active ? " active " : ""} ${events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
-											start: add(hour, {minutes:10}),
+											start: add(hour, {minutes: 10}),
 											end: add(hour, {minutes: 20})
-										}) ? "hasEvent" : ""
+										}) ? "hasEvent " + event_._id : ""
 									)
 								)
-							}></td>
+								}`} onClick={chooseToDelete}></td>
 							<td className={
-								events.map(event_ => (
+								`${active ? " active " : ""} ${events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
-											start: add(hour, {minutes:20}),
+											start: add(hour, {minutes: 20}),
 											end: add(hour, {minutes: 30})
-										}) ? "hasEvent" : ""
+										}) ? "hasEvent " + event_._id : ""
 									)
 								)
-							}></td>
+								}`} onClick={chooseToDelete}></td>
 							<td className={
-								events.map(event_ => (
+								`${active ? " active " : ""} ${events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
-											start: add(hour, {minutes:30}),
+											start: add(hour, {minutes: 30}),
 											end: add(hour, {minutes: 40})
-										}) ? "hasEvent" : ""
+										}) ? "hasEvent " + event_._id : ""
 									)
 								)
-							}></td>
+								}`} onClick={chooseToDelete}></td>
 							<td className={
-								events.map(event_ => (
+								`${active ? " active " : ""} ${events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
-											start: add(hour, {minutes:40}),
-											end: add(hour, {minutes: 50})
-										}) ? "hasEvent" : ""
-									)
-								)
-							}></td>
-							<td className={
-								events.map(event_ => (
-										isWithinInterval(parseISO(event_.time), {
-											start: add(hour, {minutes:50}),
-											end: add(hour, {minutes: 60})
-										}) ? "hasEvent" : ""
-									)
-								)
-							}></td>
+											start: add(hour, {minutes: 40}),
+								end: add(hour, {minutes: 50})
+							}
+							) ? "hasEvent " + event_._id : ""
+							)
+							)
+							}`} onClick={chooseToDelete}></td>
+						<td className={
+						`${active ? " active " : ""} ${events.map(event_ => (
+						isWithinInterval(parseISO(event_.time), {
+						start: add(hour, {minutes: 50}),
+						end: add(hour, {minutes: 60})
+					}) ? "hasEvent " + event_._id : ""
+						)
+						)
+					}`} onClick={chooseToDelete}></td>
 
 						</ScheduleRow>
-					))}
-
+						))}
+					</tbody>
 				</DaySchedule>
 				<CalendarFooter>
 					<ToToday onClick={toToday}>Today</ToToday>
+					{toDelete !== "" && <DeleteButton>Delete</DeleteButton>}
 				</CalendarFooter>
 			</CalendarBlock>
 
