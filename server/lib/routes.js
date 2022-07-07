@@ -12,3 +12,9 @@ exports.createNewEvent = async (req, res,) => {
 	const added = await db.createNewEvent(time);
 	res.status(201).json(added)
 }
+
+exports.deleteEvent = async (req, res,) => {
+	const {id} = req.body;
+	const deleted = await db.deleteEvent(id);
+	res.status(200).json(deleted)
+}

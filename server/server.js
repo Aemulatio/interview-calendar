@@ -15,6 +15,7 @@ require('./lib/db')
 
 app.get("/api/events", routes.getEventsList)
 app.post("/api/create", routes.createNewEvent)
+app.delete("/api/delete", routes.deleteEvent)
 
 
 app.listen(port, () => {
