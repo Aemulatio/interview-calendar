@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {
+	add,
 	eachDayOfInterval,
-	endOfMonth, endOfWeek,
+	eachHourOfInterval,
+	endOfWeek,
 	format,
-	startOfMonth,
+	formatISO,
+	isDate,
+	isEqual,
+	isWithinInterval,
+	parse,
+	parseISO,
 	startOfToday,
-	startOfWeek,
-	isEqual, eachHourOfInterval, add, isDate, parse, formatISO, isWithinInterval, parseISO, startOfHour
+	startOfWeek
 } from "date-fns"
 import styled from "styled-components";
 import axios from "axios";
@@ -343,7 +349,10 @@ const Calendar = () => {
 					<Week>
 						<WeekDays>
 							{currentWeek.map(dayOfWeek => (
-								<DayOfWeek key={dayOfWeek.toString()} onClick={() => {setSelectedDay(dayOfWeek); setToDelete("");}}
+								<DayOfWeek key={dayOfWeek.toString()} onClick={() => {
+									setSelectedDay(dayOfWeek);
+									setToDelete("");
+								}}
 										   className={`${isEqual(dayOfWeek, today) ? "today" : ""} ${isEqual(dayOfWeek, selectedDay) ? "current" : ""}`}
 								>
 									<span>{format(dayOfWeek, "EEEEE")}</span>
