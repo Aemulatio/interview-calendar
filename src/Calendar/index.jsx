@@ -237,24 +237,14 @@ const Calendar = () => {
 
 	const chooseToDelete = (e) => {
 		const target = e.target;
-		console.log(target.classList)
-		// target.classList.add("active")
-		setActive(true)
-
 		if (target.classList.contains("hasEvent")) {
-			setToDelete(target.classList[target.classList.length-1])
+			setToDelete(target.classList[target.classList.length - 1])
 			console.log(target.classList)
 			setActive(true)
-
-			// target.classList.add("active")
 		} else {
 			setActive(false)
-
 			setToDelete("")
 		}
-		console.log(toDelete)
-		console.log(active)
-
 	};
 
 	const DeleteEvent = () => {
@@ -358,25 +348,25 @@ const Calendar = () => {
 							<td className={
 								`${active ? " active " : ""} ${events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
-											start: add(hour, {minutes: 40}),
-								end: add(hour, {minutes: 50})
-							}
-							) ? "hasEvent " + event_._id : ""
-							)
-							)
-							}`} onClick={chooseToDelete}></td>
-						<td className={
-						`${active ? " active " : ""} ${events.map(event_ => (
-						isWithinInterval(parseISO(event_.time), {
-						start: add(hour, {minutes: 50}),
-						end: add(hour, {minutes: 60})
-					}) ? "hasEvent " + event_._id : ""
-						)
-						)
-					}`} onClick={chooseToDelete}></td>
+												start: add(hour, {minutes: 40}),
+												end: add(hour, {minutes: 50})
+											}
+										) ? "hasEvent " + event_._id : ""
+									)
+								)
+								}`} onClick={chooseToDelete}></td>
+							<td className={
+								`${active ? " active " : ""} ${events.map(event_ => (
+										isWithinInterval(parseISO(event_.time), {
+											start: add(hour, {minutes: 50}),
+											end: add(hour, {minutes: 60})
+										}) ? "hasEvent " + event_._id : ""
+									)
+								)
+								}`} onClick={chooseToDelete}></td>
 
 						</ScheduleRow>
-						))}
+					))}
 					</tbody>
 				</DaySchedule>
 				<CalendarFooter>
