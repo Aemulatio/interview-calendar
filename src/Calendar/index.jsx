@@ -254,6 +254,7 @@ const Calendar = () => {
 				}
 			)
 		)
+		setToDelete("")
 	}
 	const nextWeek = () => {
 		setCurrentWeek(
@@ -263,6 +264,7 @@ const Calendar = () => {
 				}
 			)
 		)
+		setToDelete("")
 	}
 
 	const toToday = () => {
@@ -272,6 +274,7 @@ const Calendar = () => {
 				end: endOfWeek(today, {weekStartsOn: 1})
 			}
 		))
+		setToDelete("")
 	}
 
 	const chooseToDelete = (e) => {
