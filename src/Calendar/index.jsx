@@ -6,7 +6,7 @@ import {
 	startOfMonth,
 	startOfToday,
 	startOfWeek,
-	isEqual, eachHourOfInterval, add, isDate, parse, formatISO, isWithinInterval, parseISO
+	isEqual, eachHourOfInterval, add, isDate, parse, formatISO, isWithinInterval, parseISO, startOfHour
 } from "date-fns"
 import styled from "styled-components";
 import axios from "axios";
@@ -129,9 +129,9 @@ const ScheduleRow = styled.tr`
 	padding: 2px;
 
 	border: 2px solid white;
-	display: block;
-	width: 100%;
-	height: 100%;
+	//display: block;
+	//width: 100%;
+	//height: 100%;
   }
 
   td.hasEvent.active {
@@ -198,12 +198,53 @@ const Calendar = () => {
 			}
 		))
 
+
+	const [toDelete, setToDelete] = useState("")
+
 	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})}); //.map(hour=>format(hour, "HH:mm"))
 	const [events, setEvents] = useState([])
+	let schedule = {};
 	useEffect(() => {
 		axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
-			.then(res => setEvents(res.data))
-	}, [selectedDay])
+			.then(res => {
+				setEvents(res.data);
+				// console.log("axios get")
+				// for (const event_ of res.data) {
+				// 	console.log(event_)
+				// 	console.log(event_.time)
+				// 	console.log(parseISO(event_.time))
+				// 	console.log(format(parseISO(event_.time), "HH:mm", new Date()))
+				// 	console.log(startOfHour(parseISO(event_.time)))
+				// 	schedule[format(parseISO(event_.time), "HH", new Date()).toString()] = {
+				// 		0: isWithinInterval(parseISO(event_.time), {
+				// 			start: add(startOfHour(parseISO(event_.time)), {minutes: 0}),
+				// 			end: add(startOfHour(parseISO(event_.time)), {minutes: 10})
+				// 		}),
+				// 		10: isWithinInterval(parseISO(event_.time), {
+				// 			start: add(startOfHour(parseISO(event_.time)), {minutes: 10}),
+				// 			end: add(startOfHour(parseISO(event_.time)), {minutes: 20})
+				// 		}),
+				// 		20: isWithinInterval(parseISO(event_.time), {
+				// 			start: add(startOfHour(parseISO(event_.time)), {minutes: 20}),
+				// 			end: add(startOfHour(parseISO(event_.time)), {minutes: 30})
+				// 		}),
+				// 		30: isWithinInterval(parseISO(event_.time), {
+				// 			start: add(startOfHour(parseISO(event_.time)), {minutes: 30}),
+				// 			end: add(startOfHour(parseISO(event_.time)), {minutes: 40})
+				// 		}),
+				// 		40: isWithinInterval(parseISO(event_.time), {
+				// 			start: add(startOfHour(parseISO(event_.time)), {minutes: 40}),
+				// 			end: add(startOfHour(parseISO(event_.time)), {minutes: 50})
+				// 		}),
+				// 		50: isWithinInterval(parseISO(event_.time), {
+				// 			start: add(startOfHour(parseISO(event_.time)), {minutes: 50}),
+				// 			end: add(startOfHour(parseISO(event_.time)), {minutes: 60})
+				// 		})
+				// 	}
+				// }
+				// console.log(schedule)
+			})
+	}, [selectedDay, toDelete])
 
 	const previousWeek = () => {
 		setCurrentWeek(
@@ -232,23 +273,35 @@ const Calendar = () => {
 			}
 		))
 	}
-	const [toDelete, setToDelete] = useState("")
-	const [active, setActive] = useState(false)
 
 	const chooseToDelete = (e) => {
 		const target = e.target;
+		document.querySelectorAll("td").forEach(td => td.classList.remove('active'))
 		if (target.classList.contains("hasEvent")) {
-			setToDelete(target.classList[target.classList.length - 1])
-			console.log(target.classList)
-			setActive(true)
+			target.classList.add("active")
+			setToDelete(target.classList[1])
 		} else {
-			setActive(false)
 			setToDelete("")
 		}
+		console.log(toDelete)
 	};
 
 	const DeleteEvent = () => {
 
+		axios.delete("/api/delete/", {
+			data: {
+				id: toDelete
+			}
+		})
+			.then(function (response) {
+				console.log(response);
+				setToDelete("")
+				axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
+					.then(res => setEvents(res.data))
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 	}
 
 	return (
@@ -274,8 +327,8 @@ const Calendar = () => {
 								})
 									.then(function (response) {
 										console.log(response);
-										// axios.get("/api/events")
-										// 	.then(res => setEvents(res.data))
+										axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
+											.then(res => setEvents(res.data))
 									})
 									.catch(function (error) {
 										console.log(error);
@@ -310,68 +363,61 @@ const Calendar = () => {
 							<td>{format(hour, "HH:mm")}</td>
 
 							<td className={
-								`${active ? " active " : ""} ${events.map(event_ => (
+								events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 											start: hour,
 											end: add(hour, {minutes: 10})
-										}) ? "hasEvent " + event_._id : ""
+										}) ? " hasEvent " + event_._id : ""
 									)
-								)
-								}`} onClick={chooseToDelete}></td>
+								).filter(x => x.length > 0)} onClick={chooseToDelete}></td>
 							<td className={
-								`${active ? " active " : ""} ${events.map(event_ => (
+								events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 											start: add(hour, {minutes: 10}),
 											end: add(hour, {minutes: 20})
-										}) ? "hasEvent " + event_._id : ""
+										}) ? " hasEvent " + event_._id : ""
 									)
-								)
-								}`} onClick={chooseToDelete}></td>
+								).filter(x => x.length > 0)} onClick={chooseToDelete}></td>
 							<td className={
-								`${active ? " active " : ""} ${events.map(event_ => (
+								events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 											start: add(hour, {minutes: 20}),
 											end: add(hour, {minutes: 30})
-										}) ? "hasEvent " + event_._id : ""
+										}) ? " hasEvent " + event_._id : ""
 									)
-								)
-								}`} onClick={chooseToDelete}></td>
+								).filter(x => x.length > 0)} onClick={chooseToDelete}></td>
 							<td className={
-								`${active ? " active " : ""} ${events.map(event_ => (
+								events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 											start: add(hour, {minutes: 30}),
 											end: add(hour, {minutes: 40})
-										}) ? "hasEvent " + event_._id : ""
+										}) ? " hasEvent " + event_._id : ""
 									)
-								)
-								}`} onClick={chooseToDelete}></td>
+								).filter(x => x.length > 0)} onClick={chooseToDelete}></td>
 							<td className={
-								`${active ? " active " : ""} ${events.map(event_ => (
+								events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 												start: add(hour, {minutes: 40}),
 												end: add(hour, {minutes: 50})
 											}
-										) ? "hasEvent " + event_._id : ""
+										) ? " hasEvent " + event_._id : ""
 									)
-								)
-								}`} onClick={chooseToDelete}></td>
+								).filter(x => x.length > 0)} onClick={chooseToDelete}></td>
 							<td className={
-								`${active ? " active " : ""} ${events.map(event_ => (
+								events.map(event_ => (
 										isWithinInterval(parseISO(event_.time), {
 											start: add(hour, {minutes: 50}),
 											end: add(hour, {minutes: 60})
-										}) ? "hasEvent " + event_._id : ""
+										}) ? " hasEvent " + event_._id : ""
 									)
-								)
-								}`} onClick={chooseToDelete}></td>
-
+								).filter(x => x.length > 0)} onClick={chooseToDelete}></td>
 						</ScheduleRow>
 					))}
 					</tbody>
 				</DaySchedule>
 				<CalendarFooter>
 					<ToToday onClick={toToday}>Today</ToToday>
-					{toDelete !== "" && <DeleteButton>Delete</DeleteButton>}
+					{toDelete !== "" && <DeleteButton onClick={DeleteEvent}>Delete</DeleteButton>}
 				</CalendarFooter>
 			</CalendarBlock>
 
