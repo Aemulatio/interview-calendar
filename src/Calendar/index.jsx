@@ -23,7 +23,10 @@ const CalendarBlock = styled.div`
   overflow-y: scroll;
   position: relative;
   font-family: "JetBrains Mono";
-  border: 1px solid black;
+
+  @media (min-width: 740px) {
+	margin: 0 auto;
+  }
 `;
 
 const CalendarHeader = styled.header`
