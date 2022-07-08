@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/interview-calendar/static/css/main.073c9b0a.css",
+    "main.js": "/interview-calendar/static/js/main.2f7b5258.js",
+    "static/js/787.12e263d8.chunk.js": "/interview-calendar/static/js/787.12e263d8.chunk.js",
+    "index.html": "/interview-calendar/index.html",
+    "main.073c9b0a.css.map": "/interview-calendar/static/css/main.073c9b0a.css.map",
+    "main.2f7b5258.js.map": "/interview-calendar/static/js/main.2f7b5258.js.map",
+    "787.12e263d8.chunk.js.map": "/interview-calendar/static/js/787.12e263d8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.2f7b5258.js"
+  ]
+}
