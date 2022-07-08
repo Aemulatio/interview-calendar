@@ -204,7 +204,7 @@ const Calendar = () => {
 	const hours = eachHourOfInterval({start: selectedDay, end: add(selectedDay, {days: 1})}); //.map(hour=>format(hour, "HH:mm"))
 	const [events, setEvents] = useState([])
 	useEffect(() => {
-		axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
+		axios.get("https://calendar-server-server.up.railway.app/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 			.then(res => {
 				setEvents(res.data);
 				// console.log("axios get")
@@ -290,7 +290,7 @@ const Calendar = () => {
 
 	const DeleteEvent = () => {
 
-		axios.delete("/api/delete/", {
+		axios.delete("https://calendar-server-server.up.railway.app/api/delete/", {
 			data: {
 				id: toDelete
 			}
@@ -298,7 +298,7 @@ const Calendar = () => {
 			.then(function (response) {
 				console.log(response);
 				setToDelete("")
-				axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
+				axios.get("https://calendar-server-server.up.railway.app/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 					.then(res => setEvents(res.data))
 			})
 			.catch(function (error) {
@@ -324,12 +324,12 @@ const Calendar = () => {
 								const eventDate = formatISO(parse(enteredDate, "yyyy-MM-dd HH:mm:ss", new Date()));
 								console.log(eventDate)
 
-								axios.post("/api/create/", {
+								axios.post("https://calendar-server-server.up.railway.app/api/create/", {
 									time: eventDate
 								})
 									.then(function (response) {
 										console.log(response);
-										axios.get("/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
+										axios.get("https://calendar-server-server.up.railway.app/api/events?date=" + format(selectedDay, "yyyy-MM-dd", new Date()).toString())
 											.then(res => setEvents(res.data))
 									})
 									.catch(function (error) {
