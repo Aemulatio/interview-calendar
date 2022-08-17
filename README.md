@@ -24,3 +24,4 @@ Heroku:
 https://blog.heroku.com/deploying-react-with-zero-configuration
 
 Результат:
+https://build--dazzling-salmiakki-c5280e.netlify.app/
